@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: external-partnership-service
+  config:
+    import: optional:configserver
+server:
+  port: 9090
