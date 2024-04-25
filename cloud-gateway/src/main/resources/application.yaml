@@ -1,0 +1,66 @@
+server:
+  port: 9099
+
+spring:
+  application:
+    name: CLOUD-GATEWAY
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
+  cloud:
+    gateway:
+      routes:
+        - id: AUTHENTICATION-SERVICE
+          uri: lb://AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: AUTHENTICATION-SERVICE
+                fallbackuri: forward:/authServiceFallBack
+        - id: CARD-MANAGEMENT-SYSTEM-SERVICE
+          uri: lb://CARD-MANAGEMENT-SYSTEM-SERVICE
+          predicates:
+            - Path=/cms/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CARD-MANAGEMENT-SYSTEM-SERVICE
+                fallbackuri: forward:/cmsServiceFallBack
+        - id: CORE-BANKING-SERVICE
+          uri: lb://CORE-BANKING-SERVICE
+          predicates:
+            - Path=/cbs/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CORE-BANKING-SERVICE
+                fallbackuri: forward:/cbsServiceFallBack
+        - id: EXTERNAL-PARTNERSHIP-SERVICE
+          uri: lb://EXTERNAL-PARTNERSHIP-SERVICE
+          predicates:
+            - Path=/eps/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: EXTERNAL-PARTNERSHIP-SERVICE
+                fallbackuri: forward:/epsServiceFallBack
+
+  ## keycloak configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9091/realms/sbilh
+      client:
+        provider:
+          xxxxxx:
+            issuer-uri: http://localhost:9091/realms/sbilh
+        registration:
+          yyyyyy:
+            provider: xxxxxx
+            client-name: sbilh-client
+            client-id: sbilh-client
+            client-secret: HRROBougLlwdgTnKe5p8qYIqowYVCVrP
+            scope: openid,offline_access,profile
+            authorization-grant-type: authorization_code

@@ -1,6 +1,15 @@
+server:
+  port: 9090
+
 spring:
   application:
     name: EXTERNAL-PARTNERSHIP-SERVICE
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
 
-server:
-  port: 9090
+  ## keycloak configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9091/realms/sbilh

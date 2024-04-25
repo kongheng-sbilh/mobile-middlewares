@@ -4,3 +4,12 @@ server:
 spring:
   application:
     name: AUTHENTICATION-SERVICE
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
+
+  ## keycloak configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9091/realms/sbilh

@@ -13,6 +13,9 @@
         <module>card-management-system-service</module>
         <module>core-banking-service</module>
         <module>external-partnership-service</module>
+        <module>service-registry</module>
+        <module>config-server</module>
+        <module>cloud-gateway</module>
     </modules>
     <packaging>pom</packaging>
     <groupId>kh.com.sbilhbank</groupId>
